@@ -95,7 +95,7 @@ public class Login extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (utils.DataVerification.verifyUser(formattedTextFieldUsername.getText().toString(), new String(passwordFieldPassword.getPassword()))) {
 					JOptionPane.showMessageDialog(getOwner(), "Valido", "si", JOptionPane.INFORMATION_MESSAGE);
-				}
+				} else
 				JOptionPane.showMessageDialog(getOwner(), "No valido", "Error de credenciales", JOptionPane.ERROR_MESSAGE);
 			}
 		});
