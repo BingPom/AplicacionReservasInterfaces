@@ -24,12 +24,15 @@ import java.awt.event.WindowListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 
-public class DatosVuelos extends JFrame implements WindowListener {
+public class DatosVuelos extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JTextField JTextNumHabitaciones;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
+	private JFrame previous;
+	private JTextField textFieldHoraSalida;
+	private JTextField textFieldHoraLlegada;
 
 	/**
 	 * Launch the application.
@@ -38,7 +41,7 @@ public class DatosVuelos extends JFrame implements WindowListener {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					DatosVuelos frame = new DatosVuelos(null);
+					DatosVuelos frame = new DatosVuelos();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -50,9 +53,9 @@ public class DatosVuelos extends JFrame implements WindowListener {
 	/**
 	 * Create the frame.
 	 */
-	public DatosVuelos(ActionListener login) {
+	public DatosVuelos() {
 		setTitle("Operaciones");
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -137,6 +140,12 @@ public class DatosVuelos extends JFrame implements WindowListener {
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				try {
+					Login login_frame = new Login();
+					login_frame.setVisible(true);
+				} catch (Exception f) {
+					f.printStackTrace();
+				}
 				dispose();
 			}
 		});
@@ -156,59 +165,33 @@ public class DatosVuelos extends JFrame implements WindowListener {
 				}
 			}
 		});
-		btnSeleccionarVuelo.setBounds(10, 227, 126, 23);
+		btnSeleccionarVuelo.setBounds(10, 227, 182, 23);
 		contentPane.add(btnSeleccionarVuelo);
 		
 		JButton btnAddVuelo = new JButton("Añadir Vuelo");
-		btnAddVuelo.setBounds(6, 193, 131, 23);
+		btnAddVuelo.setBounds(6, 193, 186, 23);
 		contentPane.add(btnAddVuelo);
 		
-		JLabel lblNewLabel = new JLabel("New label");
-		lblNewLabel.setBounds(21, 72, 46, 14);
-		contentPane.add(lblNewLabel);
+		JLabel lblHoraLlegada = new JLabel("Hora Llegada: ");
+		lblHoraLlegada.setBounds(31, 137, 89, 14);
+		contentPane.add(lblHoraLlegada);
 		
+		JLabel lblHoraSalida = new JLabel("Hora Salida: ");
+		lblHoraSalida.setBounds(31, 93, 89, 14);
+		contentPane.add(lblHoraSalida);
 		
-	}
-
-	@Override
-	public void windowOpened(WindowEvent e) {
-		// TODO Auto-generated method stub
+		textFieldHoraSalida = new JTextField();
+		textFieldHoraSalida.setText("0:00");
+		textFieldHoraSalida.setEditable(false);
+		textFieldHoraSalida.setColumns(10);
+		textFieldHoraSalida.setBounds(130, 90, 42, 20);
+		contentPane.add(textFieldHoraSalida);
 		
-	}
-
-	@Override
-	public void windowClosing(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowClosed(WindowEvent e) {
-		// TODO Auto-generated method stub
-		login.
-	}
-
-	@Override
-	public void windowIconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowDeiconified(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowActivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void windowDeactivated(WindowEvent e) {
-		// TODO Auto-generated method stub
-		
+		textFieldHoraLlegada = new JTextField();
+		textFieldHoraLlegada.setText("0:00");
+		textFieldHoraLlegada.setEditable(false);
+		textFieldHoraLlegada.setColumns(10);
+		textFieldHoraLlegada.setBounds(130, 134, 42, 20);
+		contentPane.add(textFieldHoraLlegada);
 	}
 }

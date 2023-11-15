@@ -25,7 +25,10 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JButton;
+import javax.swing.JDialog;
 import javax.swing.LayoutStyle.ComponentPlacement;
+import java.awt.event.ContainerAdapter;
+import java.awt.event.ContainerEvent;
 
 public class Login extends JFrame {
 
@@ -41,8 +44,8 @@ public class Login extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Login frame = new Login();
-					frame.setVisible(true);
+					Login login_frame = new Login();
+					login_frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -93,6 +96,12 @@ public class Login extends JFrame {
 		passwordFieldPassword = new JPasswordField();
 		
 		JButton btnAceptar = new JButton("Aceptar");
+		btnAceptar.addContainerListener(new ContainerAdapter() {
+			@Override
+			public void componentRemoved(ContainerEvent e) {
+				setVisible(true);
+			}
+		});
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (utils.DataVerification.verifyUser(formattedTextFieldUsername.getText().toString(), new String(passwordFieldPassword.getPassword()))) {
@@ -102,9 +111,9 @@ public class Login extends JFrame {
 						
 					} else {
 //						Perfil standard
-						setVisible(false);
 						try {
-							DatosVuelos frame = new DatosVuelos(this);
+							setVisible(false);
+							DatosVuelos frame = new DatosVuelos();
 							frame.setVisible(true);
 						} catch (Exception f) {
 							f.printStackTrace();
