@@ -1,5 +1,6 @@
 package gui.vuelos;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -15,6 +16,13 @@ import javax.swing.JButton;
 import javax.swing.JTextPane;
 import java.awt.Font;
 import javax.swing.DefaultComboBoxModel;
+import java.awt.event.InputMethodListener;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import javax.swing.JFormattedTextField;
 
 public class AddVuelo extends JFrame {
 
@@ -46,6 +54,8 @@ public class AddVuelo extends JFrame {
 	 * Create the frame.
 	 */
 	public AddVuelo() {
+		setResizable(false);
+		setTitle("Añadir Vuelo");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -80,7 +90,7 @@ public class AddVuelo extends JFrame {
 		
 		JComboBox comboBoxSalidaHora = new JComboBox();
 		comboBoxSalidaHora.setBounds(135, 89, 46, 20);
-		comboBoxSalidaHora.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3", "4"}));
+		comboBoxSalidaHora.setModel(new DefaultComboBoxModel(utils.TimeLists.getHours()));
 		
 		JLabel lbl2Puntos_1 = new JLabel(" :");
 		lbl2Puntos_1.setBounds(181, 89, 16, 17);
@@ -88,10 +98,10 @@ public class AddVuelo extends JFrame {
 		
 		JComboBox comboBoxSalidaMinutos = new JComboBox();
 		comboBoxSalidaMinutos.setBounds(197, 89, 46, 20);
-		comboBoxSalidaMinutos.setModel(new DefaultComboBoxModel(new String[] {"15", "30", "45", "00"}));
+		comboBoxSalidaMinutos.setModel(new DefaultComboBoxModel(utils.TimeLists.getMinutes()));
 		
 		JComboBox comboBoxLlegadaHora = new JComboBox();
-		comboBoxLlegadaHora.setModel(new DefaultComboBoxModel(new String[] {"werwe"}));
+		comboBoxLlegadaHora.setModel(new DefaultComboBoxModel(utils.TimeLists.getHours()));
 		comboBoxLlegadaHora.setBounds(135, 135, 46, 20);
 		
 		JLabel lbl2Puntos_2 = new JLabel(" :");
@@ -99,7 +109,7 @@ public class AddVuelo extends JFrame {
 		lbl2Puntos_2.setFont(new Font("Tahoma", Font.PLAIN, 14));
 		
 		JComboBox comboBoxLlegadaMinutos = new JComboBox();
-		comboBoxLlegadaMinutos.setModel(new DefaultComboBoxModel(new String[] {"fsd"}));
+		comboBoxLlegadaMinutos.setModel(new DefaultComboBoxModel(utils.TimeLists.getMinutes()));
 		comboBoxLlegadaMinutos.setBounds(197, 135, 46, 20);
 		contentPane.setLayout(null);
 		contentPane.add(lblDestino);
@@ -123,6 +133,36 @@ public class AddVuelo extends JFrame {
 		contentPane.add(comboBoxTarifa);
 		
 		textFieldCoste = new JTextField();
+		textFieldCoste.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyTyped(KeyEvent e) {
+				try {
+					Double.parseDouble(textFieldCoste.getText());
+					textFieldCoste.setForeground(Color.BLACK);
+				} catch (NumberFormatException f) {
+					textFieldCoste.setForeground(Color.RED);
+				}
+			}
+			@Override
+			public void keyPressed(KeyEvent e) {
+				try {
+					Double.parseDouble(textFieldCoste.getText());
+					textFieldCoste.setForeground(Color.BLACK);
+				} catch (NumberFormatException f) {
+					textFieldCoste.setForeground(Color.RED);
+				}
+			}
+			@Override
+			public void keyReleased(KeyEvent e) {
+				try {
+					Double.parseDouble(textFieldCoste.getText());
+					textFieldCoste.setForeground(Color.BLACK);
+				} catch (NumberFormatException f) {
+					textFieldCoste.setForeground(Color.RED);
+				}
+			}
+		});
+		
 		textFieldCoste.setBounds(135, 223, 93, 20);
 		contentPane.add(textFieldCoste);
 		textFieldCoste.setColumns(10);
