@@ -8,6 +8,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.text.MaskFormatter;
 
+import gui.vuelos.DatosVuelos;
+import utils.DataVerification;
+
 import javax.swing.GroupLayout;
 import javax.swing.GroupLayout.Alignment;
 import javax.swing.JFormattedTextField;
@@ -17,8 +20,6 @@ import javax.swing.JPasswordField;
 import java.awt.Dimension;
 import java.awt.event.FocusAdapter;
 import java.awt.event.FocusEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
@@ -53,6 +54,7 @@ public class Login extends JFrame {
 	 * Create the frame.
 	 */
 	public Login() {
+		setTitle("Login");
 		setMinimumSize(new Dimension(400, 250));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 459, 277);
@@ -67,7 +69,7 @@ public class Login extends JFrame {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		JFormattedTextField formattedTextFieldUsername = new JFormattedTextField(mask);
+		formattedTextFieldUsername = new JFormattedTextField(mask);
 		formattedTextFieldUsername.setFocusLostBehavior(JFormattedTextField.COMMIT);
 		formattedTextFieldUsername.addMouseListener(new MouseAdapter() {
 			@Override
@@ -94,7 +96,20 @@ public class Login extends JFrame {
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				if (utils.DataVerification.verifyUser(formattedTextFieldUsername.getText().toString(), new String(passwordFieldPassword.getPassword()))) {
-					JOptionPane.showMessageDialog(getOwner(), "Valido", "si", JOptionPane.INFORMATION_MESSAGE);
+//					Comprobamos si debemos mostrar el perfil de administrador o el usuario standard
+					if (DataVerification.isAdmin(formattedTextFieldUsername.getText().toString())) {
+//						Perfil de admin
+						
+					} else {
+//						Perfil standard
+						setVisible(false);
+						try {
+							DatosVuelos frame = new DatosVuelos(this);
+							frame.setVisible(true);
+						} catch (Exception f) {
+							f.printStackTrace();
+						}
+					}
 				} else
 				JOptionPane.showMessageDialog(getOwner(), "No valido", "Error de credenciales", JOptionPane.ERROR_MESSAGE);
 			}

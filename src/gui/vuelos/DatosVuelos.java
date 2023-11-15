@@ -12,13 +12,19 @@ import javax.swing.JDialog;
 import javax.swing.JRadioButton;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.event.ChangeListener;
+
+import gui.login.Login;
+
 import javax.swing.event.ChangeEvent;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 import java.awt.event.ActionEvent;
+import javax.swing.JLabel;
 
-public class DatosVuelos extends JFrame {
+public class DatosVuelos extends JFrame implements WindowListener {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
@@ -32,7 +38,7 @@ public class DatosVuelos extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					DatosVuelos frame = new DatosVuelos();
+					DatosVuelos frame = new DatosVuelos(null);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -44,7 +50,8 @@ public class DatosVuelos extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public DatosVuelos() {
+	public DatosVuelos(ActionListener login) {
+		setTitle("Operaciones");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -151,5 +158,57 @@ public class DatosVuelos extends JFrame {
 		});
 		btnSeleccionarVuelo.setBounds(10, 227, 126, 23);
 		contentPane.add(btnSeleccionarVuelo);
+		
+		JButton btnAddVuelo = new JButton("Añadir Vuelo");
+		btnAddVuelo.setBounds(6, 193, 131, 23);
+		contentPane.add(btnAddVuelo);
+		
+		JLabel lblNewLabel = new JLabel("New label");
+		lblNewLabel.setBounds(21, 72, 46, 14);
+		contentPane.add(lblNewLabel);
+		
+		
+	}
+
+	@Override
+	public void windowOpened(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowClosing(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowClosed(WindowEvent e) {
+		// TODO Auto-generated method stub
+		login.
+	}
+
+	@Override
+	public void windowIconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowDeiconified(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowActivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void windowDeactivated(WindowEvent e) {
+		// TODO Auto-generated method stub
+		
 	}
 }

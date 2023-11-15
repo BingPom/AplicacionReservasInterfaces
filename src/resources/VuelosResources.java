@@ -25,8 +25,7 @@ public class VuelosResources {
 				new Vuelo("Oporto", "4:50", "7:40", "Business", 340),
 				new Vuelo("Oporto", "14:20", "16:30", "Business", 260),
 				new Vuelo("Oporto", "12:15", "14:35", "Turista", 210),
-				new Vuelo("Oporto", "9:40", "11:20", "Turista", 180),
-				new Vuelo("Azul como el mar", "9:40", "11:20", "Azul", 180)
+				new Vuelo("Oporto", "9:40", "11:20", "Turista", 180)
 			);
 	
 	public static Object[][] toObjectMatrix() {
