@@ -6,9 +6,14 @@ import java.text.ParseException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.text.MaskFormatter;
 
 import gui.vuelos.DatosVuelos;
+import model.Language;
+import model.Profile;
+import model.User;
 import utils.DataVerification;
 
 import javax.swing.GroupLayout;
@@ -25,7 +30,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JButton;
-import javax.swing.JDialog;
 import javax.swing.LayoutStyle.ComponentPlacement;
 import java.awt.event.ContainerAdapter;
 import java.awt.event.ContainerEvent;
@@ -36,6 +40,7 @@ public class Login extends JFrame {
 	private JPanel contentPane;
 	private JPasswordField passwordFieldPassword;
 	private JFormattedTextField formattedTextFieldUsername;
+	public static User user = null;
 
 	/**
 	 * Launch the application.
@@ -59,7 +64,7 @@ public class Login extends JFrame {
 	public Login() {
 		setTitle("Login");
 		setMinimumSize(new Dimension(400, 250));
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 459, 277);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -107,17 +112,27 @@ public class Login extends JFrame {
 				if (utils.DataVerification.verifyUser(formattedTextFieldUsername.getText().toString(), new String(passwordFieldPassword.getPassword()))) {
 //					Comprobamos si debemos mostrar el perfil de administrador o el usuario standard
 					if (DataVerification.isAdmin(formattedTextFieldUsername.getText().toString())) {
+//						Creamos el usuario, al no ser admin, su idioma es inglés
+						user = new User(formattedTextFieldUsername.getText().toString(), new String(passwordFieldPassword.getPassword()), Profile.ADMIN, Language.ENGLISH);
 //						Perfil de admin
-						
-					} else {
-//						Perfil standard
 						try {
-							setVisible(false);
-							DatosVuelos frame = new DatosVuelos();
+							DatosVuelos frame = new DatosVuelos(null, null, false, 0);
 							frame.setVisible(true);
 						} catch (Exception f) {
 							f.printStackTrace();
 						}
+						dispose();
+					} else {
+//						Creamos el usuario, al no ser admin, su idioma es español
+						user = new User(formattedTextFieldUsername.getText().toString(), new String(passwordFieldPassword.getPassword()), Profile.STANDARD, Language.ESPAÑOL);
+//						Perfil standard
+						try {
+							DatosVuelos frame = new DatosVuelos(null, null, false, 0);
+							frame.setVisible(true);
+						} catch (Exception f) {
+							f.printStackTrace();
+						}
+						dispose();
 					}
 				} else
 				JOptionPane.showMessageDialog(getOwner(), "No valido", "Error de credenciales", JOptionPane.ERROR_MESSAGE);

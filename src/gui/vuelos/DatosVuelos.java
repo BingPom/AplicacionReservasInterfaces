@@ -14,15 +14,18 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.event.ChangeListener;
 
 import gui.login.Login;
+import model.Profile;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.ButtonGroup;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
+import java.beans.PropertyChangeListener;
+import java.beans.PropertyChangeEvent;
 
 public class DatosVuelos extends JFrame {
 
@@ -30,7 +33,6 @@ public class DatosVuelos extends JFrame {
 	private JPanel contentPane;
 	private JTextField JTextNumHabitaciones;
 	private final ButtonGroup buttonGroup = new ButtonGroup();
-	private JFrame previous;
 	private JTextField textFieldHoraSalida;
 	private JTextField textFieldHoraLlegada;
 
@@ -41,7 +43,7 @@ public class DatosVuelos extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					DatosVuelos frame = new DatosVuelos();
+					DatosVuelos frame = new DatosVuelos("", "", false, 0);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -53,7 +55,7 @@ public class DatosVuelos extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public DatosVuelos() {
+	public DatosVuelos(String hora_salida, String hora_llegada, boolean vueloSelected, int destinoIndex) {
 		setTitle("Operaciones");
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -62,32 +64,40 @@ public class DatosVuelos extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		JTextNumHabitaciones = new JTextField();
 		JTextNumHabitaciones.setEnabled(false);
 		JTextNumHabitaciones.setToolTipText("Núm. habitaciones");
 		JTextNumHabitaciones.setBounds(303, 90, 86, 20);
 		contentPane.add(JTextNumHabitaciones);
 		JTextNumHabitaciones.setColumns(10);
-		
+
 		JComboBox comboBoxDestinoVuelo = new JComboBox();
+		
+//		comboBoxDestinoVuelo.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				textFieldHoraSalida.setText("");
+//				textFieldHoraLlegada.setText("");
+//			}
+//		});
 		comboBoxDestinoVuelo.setEnabled(false);
 		comboBoxDestinoVuelo.setModel(new DefaultComboBoxModel(resources.VuelosResources.getDestinos()));
 		comboBoxDestinoVuelo.setBounds(64, 37, 73, 22);
+		comboBoxDestinoVuelo.setSelectedIndex(destinoIndex);
 		contentPane.add(comboBoxDestinoVuelo);
-		
+
 		JRadioButton rdbtnHabitacionIndividual = new JRadioButton("Individual");
 		rdbtnHabitacionIndividual.setEnabled(false);
 		buttonGroup.add(rdbtnHabitacionIndividual);
 		rdbtnHabitacionIndividual.setBounds(232, 37, 78, 23);
 		contentPane.add(rdbtnHabitacionIndividual);
-		
+
 		JRadioButton rdbtnHabitacionDoble = new JRadioButton("Doble");
 		rdbtnHabitacionDoble.setEnabled(false);
 		buttonGroup.add(rdbtnHabitacionDoble);
 		rdbtnHabitacionDoble.setBounds(232, 63, 65, 23);
 		contentPane.add(rdbtnHabitacionDoble);
-		
+
 		JRadioButton rdbtnHabitacionMultiple = new JRadioButton("Múltiple");
 		rdbtnHabitacionMultiple.setEnabled(false);
 		buttonGroup.add(rdbtnHabitacionMultiple);
@@ -102,20 +112,40 @@ public class DatosVuelos extends JFrame {
 		});
 		rdbtnHabitacionMultiple.setBounds(232, 89, 65, 23);
 		contentPane.add(rdbtnHabitacionMultiple);
+		
+		JButton btnSeleccionarVuelo = new JButton("Seleccionar vuelo");
+		btnSeleccionarVuelo.setEnabled(false);
+		btnSeleccionarVuelo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+//				Abrimos el PopUp
+				try {
+					TablaVuelos dialog = new TablaVuelos(comboBoxDestinoVuelo.getSelectedItem().toString());
+					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.setVisible(true);
+					setVisible(false);
+				} catch (Exception f) {
+					f.printStackTrace();
+				}
+			}
+		});
+		btnSeleccionarVuelo.setBounds(10, 227, 182, 23);
 
 		JCheckBox chckbxReservaVuelo = new JCheckBox("Reservar Vuelo");
 		chckbxReservaVuelo.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (chckbxReservaVuelo.isSelected()) {
 					comboBoxDestinoVuelo.setEnabled(true);
+					btnSeleccionarVuelo.setEnabled(true);
 				} else {
 					comboBoxDestinoVuelo.setEnabled(false);
+					btnSeleccionarVuelo.setEnabled(false);
 				}
 			}
 		});
 		chckbxReservaVuelo.setBounds(6, 7, 99, 23);
+		chckbxReservaVuelo.setSelected(vueloSelected);
 		contentPane.add(chckbxReservaVuelo);
-		
+
 		JCheckBox chckbxReservarHabitacion = new JCheckBox("Reservar habitación");
 		chckbxReservarHabitacion.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
@@ -132,11 +162,11 @@ public class DatosVuelos extends JFrame {
 		});
 		chckbxReservarHabitacion.setBounds(197, 7, 126, 23);
 		contentPane.add(chckbxReservarHabitacion);
-		
+
 		JButton btnAceptar = new JButton("Aceptar");
 		btnAceptar.setBounds(234, 227, 89, 23);
 		contentPane.add(btnAceptar);
-		
+
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -151,47 +181,58 @@ public class DatosVuelos extends JFrame {
 		});
 		btnCancelar.setBounds(335, 227, 89, 23);
 		contentPane.add(btnCancelar);
+
 		
-		JButton btnSeleccionarVuelo = new JButton("Seleccionar vuelo");
-		btnSeleccionarVuelo.addActionListener(new ActionListener() {
+
+		JButton btnAddVuelo = new JButton("Añadir Vuelo");
+		btnAddVuelo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-//				Abrimos el PopUp
 				try {
-					TablaVuelos dialog = new TablaVuelos(comboBoxDestinoVuelo.getSelectedItem().toString());
-					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-					dialog.setVisible(true);
+					AddVuelo frame = new AddVuelo();
+					frame.setVisible(true);
 				} catch (Exception f) {
 					f.printStackTrace();
 				}
 			}
 		});
-		btnSeleccionarVuelo.setBounds(10, 227, 182, 23);
-		contentPane.add(btnSeleccionarVuelo);
-		
-		JButton btnAddVuelo = new JButton("Añadir Vuelo");
 		btnAddVuelo.setBounds(6, 193, 186, 23);
 		contentPane.add(btnAddVuelo);
-		
+//		Check if the user is an admin
+		if (!(Login.user.getProfile() == Profile.ADMIN)) {
+			btnAddVuelo.setVisible(false);
+		}
+
 		JLabel lblHoraLlegada = new JLabel("Hora Llegada: ");
 		lblHoraLlegada.setBounds(31, 137, 89, 14);
 		contentPane.add(lblHoraLlegada);
-		
+
 		JLabel lblHoraSalida = new JLabel("Hora Salida: ");
 		lblHoraSalida.setBounds(31, 93, 89, 14);
-		contentPane.add(lblHoraSalida);
 		
+		comboBoxDestinoVuelo.addItemListener(new ItemListener() {
+			
+			@Override
+			public void itemStateChanged(ItemEvent e) {
+				textFieldHoraSalida.setText("");
+				textFieldHoraLlegada.setText("");
+			}
+		});
+		
+		contentPane.add(lblHoraSalida);
+
 		textFieldHoraSalida = new JTextField();
-		textFieldHoraSalida.setText("0:00");
+		textFieldHoraSalida.setText(hora_salida != null? hora_salida : "");
 		textFieldHoraSalida.setEditable(false);
 		textFieldHoraSalida.setColumns(10);
 		textFieldHoraSalida.setBounds(130, 90, 42, 20);
 		contentPane.add(textFieldHoraSalida);
-		
+
 		textFieldHoraLlegada = new JTextField();
-		textFieldHoraLlegada.setText("0:00");
+		textFieldHoraLlegada.setText(hora_llegada != null? hora_llegada : "");
 		textFieldHoraLlegada.setEditable(false);
 		textFieldHoraLlegada.setColumns(10);
 		textFieldHoraLlegada.setBounds(130, 134, 42, 20);
 		contentPane.add(textFieldHoraLlegada);
+		contentPane.add(btnSeleccionarVuelo);
 	}
 }

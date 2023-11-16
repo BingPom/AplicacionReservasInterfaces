@@ -11,10 +11,18 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
+
+import model.Vuelo;
+import gui.login.Login;
+import resources.VuelosResources;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.JScrollPane;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.awt.event.ActionEvent;
 
 public class TablaVuelos extends JDialog {
 
@@ -61,15 +69,11 @@ public class TablaVuelos extends JDialog {
 		scrollPane.setBounds(49, 68, 357, 105);
 		contentPanel.add(scrollPane);
 		
-		resources.VuelosResources.toObjectMatrix();
-		
 		tableVuelos = new JTable();
 //		tableVuelos.setRowSorter(RowFilter.regexFilter("A", 1));
 		tableVuelos.setModel(new DefaultTableModel(
 			resources.VuelosResources.toObjectMatrix(),
-			new String[] {
-				"Destino", "Hora salida", "Hora llegada", "Tarifa", "Eur"
-			}
+			Vuelo.getFields(Login.user.getLanguage())
 		) {
 			boolean[] columnEditables = new boolean[] {
 				false, false, false, false, false
@@ -89,6 +93,31 @@ public class TablaVuelos extends JDialog {
 			getContentPane().add(buttonPane, BorderLayout.SOUTH);
 			{
 				JButton okButton = new JButton("OK");
+				okButton.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						if (tableVuelos.getSelectedRow() >= 0) {
+							String hora_salida = tableVuelos.getValueAt(tableVuelos.getSelectedRow(), 1).toString(); //Hora de salida
+							String hora_llegada = tableVuelos.getValueAt(tableVuelos.getSelectedRow(), 2).toString(); //Hora de llegada
+							try {
+								DatosVuelos frame = new DatosVuelos(hora_salida, hora_llegada, true, 
+										getIndexDestino(tableVuelos.getValueAt(tableVuelos.getSelectedRow(), 0).toString()));
+								frame.setVisible(true);
+							} catch (Exception f) {
+								f.printStackTrace();
+							}
+							dispose();
+						}
+					}
+
+					private int getIndexDestino(String destino){
+						Object[] destinos = VuelosResources.getDestinos();
+						ArrayList<String> destinos_array = new ArrayList<String>();
+						for (int i = 0; i < destinos.length; i++) {
+							destinos_array.add(destinos[i].toString());
+						}
+						return destinos_array.indexOf(destino);
+					}
+				});
 				okButton.setActionCommand("OK");
 				buttonPane.add(okButton);
 				getRootPane().setDefaultButton(okButton);

@@ -8,7 +8,6 @@ public class User {
 	private Profile profile;
 	private Language language;
 	
-	
 	public User(String username, String password, Profile profile, Language language) {
 		super();
 		this.username = username;

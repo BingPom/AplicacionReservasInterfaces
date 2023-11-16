@@ -8,7 +8,7 @@ public class ES {
 		private static final long serialVersionUID = 1L;
 
 	{
-		put("", "");
+		put("Turista", "Turista");
 		put("", "");
 	}};
 	

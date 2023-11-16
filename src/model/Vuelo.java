@@ -8,11 +8,11 @@ public class Vuelo {
 	private String destino;
 	private String horaSalida;
 	private String horaLlegada;
-	private String tarifa;
+	private Tarifa tarifa;
 	private Double Coste;
 	
 //	Constructor
-	public Vuelo(String destino, String horaSalida, String horaLlegada, String tarifa, Double coste) {
+	public Vuelo(String destino, String horaSalida, String horaLlegada, Tarifa tarifa, Double coste) {
 		super();
 		this.destino = destino;
 		this.horaSalida = horaSalida;
@@ -20,7 +20,8 @@ public class Vuelo {
 		this.tarifa = tarifa;
 		Coste = coste;
 	}
-	public Vuelo(String destino, String horaSalida, String horaLlegada, String tarifa, int coste) {
+	
+	public Vuelo(String destino, String horaSalida, String horaLlegada, Tarifa tarifa, int coste) {
 		this(destino, horaSalida, horaLlegada, tarifa, (double) coste);
 	}
 	
@@ -34,13 +35,22 @@ public class Vuelo {
 	public String getHoraLlegada() {
 		return horaLlegada;
 	}
-	public String getTarifa() {
+	public Tarifa getTarifa() {
 		return tarifa;
 	}
 	public Double getCoste() {
 		return Coste;
 	}
 	
-	
+	public static String[] getFields(Language lang) {
+		switch(lang) {
+			case ENGLISH:
+				return new String[] {"Destination", "Departure", "Arrival", "Class", "Eur"};
+			case ESPAÑOL:
+				return new String[] {"Destino", "Hora salida", "Hora llegada", "Tarifa", "Eur"};
+			default:
+				return null;
+		}
+	}
 	
 }
