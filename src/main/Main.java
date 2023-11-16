@@ -1,15 +1,29 @@
 package main;
 
-import model.Tarifa;
-import model.Vuelo;
-import resources.VuelosResources;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import gui.login.Login;
 
 public class Main {
 
 	public static void main(String[] args) {
-		System.out.println("intento");
-		VuelosResources.addVuelo(new Vuelo("sdfsd", "asdsad", "asdas", Tarifa.BUSINESS, 123.0));
-		System.out.println("lsito");
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (ClassNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (InstantiationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (UnsupportedLookAndFeelException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		new Login().setVisible(true);
 	}
 
 }

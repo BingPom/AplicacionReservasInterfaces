@@ -136,6 +136,15 @@ public class AddVuelo extends JFrame {
 													toTime(comboBoxLlegadaHora, comboBoxLlegadaMinutos), 
 													toTarifa(comboBoxTarifa.getSelectedItem().toString()),
 													Double.parseDouble(textFieldCoste.getText())));
+//				Close window
+				try {
+					DatosVuelos dialog = new DatosVuelos(null, null, false, 0);
+					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+					dialog.setVisible(true);
+				} catch (Exception f) {
+					f.printStackTrace();
+				}
+				dispose();
 			}
 			
 			private String toTime(JComboBox hora, JComboBox minuto) {
@@ -165,6 +174,8 @@ public class AddVuelo extends JFrame {
 			public void removeUpdate(DocumentEvent e) {
 				if (checkIsValidCost()) {
 					btnAdd.setEnabled(true);
+				} else {
+					btnAdd.setEnabled(false);
 				}
 			}
 			
@@ -172,6 +183,8 @@ public class AddVuelo extends JFrame {
 			public void insertUpdate(DocumentEvent e) {
 				if (checkIsValidCost()) {
 					btnAdd.setEnabled(true);
+				} else {
+					btnAdd.setEnabled(false);
 				}
 			}
 			
@@ -179,6 +192,8 @@ public class AddVuelo extends JFrame {
 			public void changedUpdate(DocumentEvent e) {
 				if (checkIsValidCost()) {
 					btnAdd.setEnabled(true);
+				} else {
+					btnAdd.setEnabled(false);
 				}
 			}
 

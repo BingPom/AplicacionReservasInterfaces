@@ -1,5 +1,6 @@
 package gui.vuelos;
 
+import java.awt.Color;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -12,6 +13,8 @@ import javax.swing.JDialog;
 import javax.swing.JRadioButton;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.event.ChangeListener;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 
 import gui.login.Login;
 import model.Profile;
@@ -24,7 +27,10 @@ import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.beans.PropertyChangeListener;
+import java.security.PublicKey;
 import java.beans.PropertyChangeEvent;
 
 public class DatosVuelos extends JFrame {
@@ -64,28 +70,11 @@ public class DatosVuelos extends JFrame {
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-
-		JTextNumHabitaciones = new JTextField();
-		JTextNumHabitaciones.setEnabled(false);
-		JTextNumHabitaciones.setToolTipText("Núm. habitaciones");
-		JTextNumHabitaciones.setBounds(303, 90, 86, 20);
-		contentPane.add(JTextNumHabitaciones);
-		JTextNumHabitaciones.setColumns(10);
-
-		JComboBox comboBoxDestinoVuelo = new JComboBox();
 		
-//		comboBoxDestinoVuelo.addActionListener(new ActionListener() {
-//			public void actionPerformed(ActionEvent e) {
-//				textFieldHoraSalida.setText("");
-//				textFieldHoraLlegada.setText("");
-//			}
-//		});
-		comboBoxDestinoVuelo.setEnabled(false);
-		comboBoxDestinoVuelo.setModel(new DefaultComboBoxModel(resources.VuelosResources.getDestinos()));
-		comboBoxDestinoVuelo.setBounds(64, 37, 73, 22);
-		comboBoxDestinoVuelo.setSelectedIndex(destinoIndex);
-		contentPane.add(comboBoxDestinoVuelo);
-
+		JButton btnAceptar = new JButton("Aceptar");
+		btnAceptar.setBounds(234, 227, 89, 23);
+		contentPane.add(btnAceptar);
+		
 		JRadioButton rdbtnHabitacionIndividual = new JRadioButton("Individual");
 		rdbtnHabitacionIndividual.setEnabled(false);
 		buttonGroup.add(rdbtnHabitacionIndividual);
@@ -105,14 +94,91 @@ public class DatosVuelos extends JFrame {
 			public void stateChanged(ChangeEvent e) {
 				if (rdbtnHabitacionMultiple.isSelected()) {
 					JTextNumHabitaciones.setEnabled(true);
+					JTextNumHabitaciones.setText("");
+					btnAceptar.setEnabled(false);
 				} else {
 					JTextNumHabitaciones.setEnabled(false);
+					JTextNumHabitaciones.setText("");
+					btnAceptar.setEnabled(true);
 				}
 			}
 		});
 		rdbtnHabitacionMultiple.setBounds(232, 89, 65, 23);
 		contentPane.add(rdbtnHabitacionMultiple);
 		
+		JCheckBox chckbxReservarHabitacion = new JCheckBox("Reservar habitación");
+		chckbxReservarHabitacion.addChangeListener(new ChangeListener() {
+			public void stateChanged(ChangeEvent e) {
+				if (chckbxReservarHabitacion.isSelected()) {
+					rdbtnHabitacionIndividual.setEnabled(true);
+					rdbtnHabitacionDoble.setEnabled(true);
+					rdbtnHabitacionMultiple.setEnabled(true);
+				} else {
+					rdbtnHabitacionIndividual.setEnabled(false);
+					rdbtnHabitacionDoble.setEnabled(false);
+					rdbtnHabitacionMultiple.setEnabled(false);
+					btnAceptar.setEnabled(true);
+				}
+			}
+		});
+		chckbxReservarHabitacion.setBounds(197, 7, 126, 23);
+		contentPane.add(chckbxReservarHabitacion);
+
+		JTextNumHabitaciones = new JTextField();
+		JTextNumHabitaciones.setEnabled(false);
+		JTextNumHabitaciones.setToolTipText("Núm. habitaciones");
+		JTextNumHabitaciones.setBounds(303, 90, 86, 20);
+		contentPane.add(JTextNumHabitaciones);
+		JTextNumHabitaciones.setColumns(10);
+		JTextNumHabitaciones.getDocument().addDocumentListener(new DocumentListener() {
+			
+			@Override
+			public void removeUpdate(DocumentEvent e) {
+				checkNumHabitaciones(btnAceptar, rdbtnHabitacionMultiple, chckbxReservarHabitacion);
+			}
+
+			@Override
+			public void insertUpdate(DocumentEvent e) {
+				checkNumHabitaciones(btnAceptar, rdbtnHabitacionMultiple, chckbxReservarHabitacion);
+			}
+
+			@Override
+			public void changedUpdate(DocumentEvent e) {
+				checkNumHabitaciones(btnAceptar, rdbtnHabitacionMultiple, chckbxReservarHabitacion);
+			}
+
+			private void checkNumHabitaciones(JButton btnAceptar, JRadioButton rdbtnHabitacionMultiple,
+					JCheckBox chckbxReservarHabitacion) {
+				if (!rdbtnHabitacionMultiple.isSelected()) {
+					btnAceptar.setEnabled(true);
+				}else if (!chckbxReservarHabitacion.isEnabled()) {
+					btnAceptar.setEnabled(true);
+				} else if (checkIsValidCost() && chckbxReservarHabitacion.isEnabled()) {
+					btnAceptar.setEnabled(true);
+				} else {
+					btnAceptar.setEnabled(false);
+				}
+			}
+
+			private boolean checkIsValidCost() {
+				try {
+					Double.parseDouble(JTextNumHabitaciones.getText());
+					JTextNumHabitaciones.setForeground(Color.BLACK);
+					return true;
+				} catch (NumberFormatException f) {
+					JTextNumHabitaciones.setForeground(Color.RED);
+				}
+				return false;
+			}
+		});
+
+		JComboBox comboBoxDestinoVuelo = new JComboBox();
+		comboBoxDestinoVuelo.setEnabled(false);
+		comboBoxDestinoVuelo.setModel(new DefaultComboBoxModel(resources.VuelosResources.getDestinos()));
+		comboBoxDestinoVuelo.setBounds(64, 37, 73, 22);
+		comboBoxDestinoVuelo.setSelectedIndex(destinoIndex);
+		contentPane.add(comboBoxDestinoVuelo);
+
 		JButton btnSeleccionarVuelo = new JButton("Seleccionar vuelo");
 		btnSeleccionarVuelo.setEnabled(false);
 		btnSeleccionarVuelo.addActionListener(new ActionListener() {
@@ -146,27 +212,6 @@ public class DatosVuelos extends JFrame {
 		chckbxReservaVuelo.setSelected(vueloSelected);
 		contentPane.add(chckbxReservaVuelo);
 
-		JCheckBox chckbxReservarHabitacion = new JCheckBox("Reservar habitación");
-		chckbxReservarHabitacion.addChangeListener(new ChangeListener() {
-			public void stateChanged(ChangeEvent e) {
-				if (chckbxReservarHabitacion.isSelected()) {
-					rdbtnHabitacionIndividual.setEnabled(true);
-					rdbtnHabitacionDoble.setEnabled(true);
-					rdbtnHabitacionMultiple.setEnabled(true);
-				} else {
-					rdbtnHabitacionIndividual.setEnabled(false);
-					rdbtnHabitacionDoble.setEnabled(false);
-					rdbtnHabitacionMultiple.setEnabled(false);
-				}
-			}
-		});
-		chckbxReservarHabitacion.setBounds(197, 7, 126, 23);
-		contentPane.add(chckbxReservarHabitacion);
-
-		JButton btnAceptar = new JButton("Aceptar");
-		btnAceptar.setBounds(234, 227, 89, 23);
-		contentPane.add(btnAceptar);
-
 		JButton btnCancelar = new JButton("Cancelar");
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -181,8 +226,6 @@ public class DatosVuelos extends JFrame {
 		});
 		btnCancelar.setBounds(335, 227, 89, 23);
 		contentPane.add(btnCancelar);
-
-		
 
 		JButton btnAddVuelo = new JButton("Añadir Vuelo");
 		btnAddVuelo.addActionListener(new ActionListener() {
@@ -208,9 +251,9 @@ public class DatosVuelos extends JFrame {
 
 		JLabel lblHoraSalida = new JLabel("Hora Salida: ");
 		lblHoraSalida.setBounds(31, 93, 89, 14);
-		
+
 		comboBoxDestinoVuelo.addItemListener(new ItemListener() {
-			
+
 			@Override
 			public void itemStateChanged(ItemEvent e) {
 				textFieldHoraSalida.setText("");
@@ -218,21 +261,74 @@ public class DatosVuelos extends JFrame {
 			}
 		});
 		
-		contentPane.add(lblHoraSalida);
+		btnAceptar.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(getOwner(), getMessage(), "Resumen reserva", JOptionPane.ERROR_MESSAGE);
+			}
+
+			private String getMessage() {
+				String message = "Has reservado ";
+//				If no checkbox is checked
+				if (!(chckbxReservaVuelo.isSelected() || chckbxReservarHabitacion.isSelected())) {
+					return "Nada ha sido reservado.";
+				}
+//				If there is a destination
+				if (chckbxReservaVuelo.isSelected()) {
+//					Check if a time has been selected
+					if (!textFieldHoraSalida.getText().toString().equals("")) {
+						message += "un vuelo desde " + comboBoxDestinoVuelo.getSelectedItem().toString() + " a las " + textFieldHoraSalida.getText();
+						if (!chckbxReservarHabitacion.isSelected()) {
+							return message += ".";
+						}
+					} else {
+						return "Nada ha sido reservado.";
+					}
+				}
+				if (chckbxReservarHabitacion.isSelected()) {
+//					If no radio button is checked
+					if (!(rdbtnHabitacionIndividual.isSelected() || 
+							rdbtnHabitacionDoble.isSelected() || 
+							rdbtnHabitacionMultiple.isSelected())) {
+//						If there is a destination
+						if (chckbxReservaVuelo.isSelected()) {
+//							Message except " y "
+							return message;
+						} else {
+							return "Nada ha sido reservado.";
+						}
+					}
+					if (chckbxReservaVuelo.isSelected() && chckbxReservarHabitacion.isSelected()) {
+						message += " y ";
+					}
+					message += "una habitación ";
+					if (rdbtnHabitacionIndividual.isSelected()) {
+						message += "individual.";
+					} else if (rdbtnHabitacionDoble.isSelected()) {
+						message += "doble.";
+					} else if (rdbtnHabitacionMultiple.isSelected()) {
+						message += "para " + JTextNumHabitaciones.getText() + " personas.";
+					}
+				}
+				return message;
+			}
+			
+			
+		});
 
 		textFieldHoraSalida = new JTextField();
-		textFieldHoraSalida.setText(hora_salida != null? hora_salida : "");
+		textFieldHoraSalida.setText(hora_salida != null ? hora_salida : "");
 		textFieldHoraSalida.setEditable(false);
 		textFieldHoraSalida.setColumns(10);
 		textFieldHoraSalida.setBounds(130, 90, 42, 20);
-		contentPane.add(textFieldHoraSalida);
-
 		textFieldHoraLlegada = new JTextField();
-		textFieldHoraLlegada.setText(hora_llegada != null? hora_llegada : "");
+		textFieldHoraLlegada.setText(hora_llegada != null ? hora_llegada : "");
 		textFieldHoraLlegada.setEditable(false);
 		textFieldHoraLlegada.setColumns(10);
 		textFieldHoraLlegada.setBounds(130, 134, 42, 20);
+		
 		contentPane.add(textFieldHoraLlegada);
 		contentPane.add(btnSeleccionarVuelo);
+		contentPane.add(lblHoraSalida);
+		contentPane.add(textFieldHoraSalida);
 	}
 }
