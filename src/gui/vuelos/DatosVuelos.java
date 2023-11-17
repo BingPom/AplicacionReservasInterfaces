@@ -263,16 +263,12 @@ public class DatosVuelos extends JFrame {
 		
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(getOwner(), getMessage(), "Resumen reserva", JOptionPane.ERROR_MESSAGE);
+				JOptionPane.showMessageDialog(getOwner(), getMessage(), "Resumen reserva", JOptionPane.INFORMATION_MESSAGE);
 			}
 
 			private String getMessage() {
 				String message = "Has reservado ";
-//				If no checkbox is checked
-				if (!(chckbxReservaVuelo.isSelected() || chckbxReservarHabitacion.isSelected())) {
-					return "Nada ha sido reservado.";
-				}
-//				If there is a destination
+//				If destination is checked
 				if (chckbxReservaVuelo.isSelected()) {
 //					Check if a time has been selected
 					if (!textFieldHoraSalida.getText().toString().equals("")) {
@@ -280,10 +276,12 @@ public class DatosVuelos extends JFrame {
 						if (!chckbxReservarHabitacion.isSelected()) {
 							return message += ".";
 						}
-					} else {
+//					If ReservaHabitacion is not checked
+					} else if (!chckbxReservarHabitacion.isSelected()) {
 						return "Nada ha sido reservado.";
 					}
 				}
+//				If ReservaHabitacion is checked
 				if (chckbxReservarHabitacion.isSelected()) {
 //					If no radio button is checked
 					if (!(rdbtnHabitacionIndividual.isSelected() || 
@@ -297,10 +295,10 @@ public class DatosVuelos extends JFrame {
 							return "Nada ha sido reservado.";
 						}
 					}
+//					Both are checked
 					if (chckbxReservaVuelo.isSelected() && chckbxReservarHabitacion.isSelected()) {
-						message += " y ";
+						message += " y una habitación ";
 					}
-					message += "una habitación ";
 					if (rdbtnHabitacionIndividual.isSelected()) {
 						message += "individual.";
 					} else if (rdbtnHabitacionDoble.isSelected()) {
@@ -308,6 +306,10 @@ public class DatosVuelos extends JFrame {
 					} else if (rdbtnHabitacionMultiple.isSelected()) {
 						message += "para " + JTextNumHabitaciones.getText() + " personas.";
 					}
+				}
+//				If no checkbox is checked
+				if (!(chckbxReservaVuelo.isSelected() || chckbxReservarHabitacion.isSelected())) {
+					return "Nada ha sido reservado.";
 				}
 				return message;
 			}
