@@ -18,6 +18,7 @@ import javax.swing.event.DocumentListener;
 
 import gui.login.Login;
 import model.Profile;
+import resources.messages.Messages;
 
 import javax.swing.event.ChangeEvent;
 import javax.swing.ButtonGroup;
@@ -28,10 +29,6 @@ import java.awt.event.ItemListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
-import java.beans.PropertyChangeListener;
-import java.security.PublicKey;
-import java.beans.PropertyChangeEvent;
 
 public class DatosVuelos extends JFrame {
 
@@ -62,7 +59,7 @@ public class DatosVuelos extends JFrame {
 	 * Create the frame.
 	 */
 	public DatosVuelos(String hora_salida, String hora_llegada, boolean vueloSelected, int destinoIndex) {
-		setTitle("Operaciones");
+		setTitle(Messages.getMessage(Login.user.getLanguage(), "Operaciones"));
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -71,23 +68,23 @@ public class DatosVuelos extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JButton btnAceptar = new JButton("Aceptar");
+		JButton btnAceptar = new JButton(Messages.getMessage(Login.user.getLanguage(), "Aceptar"));
 		btnAceptar.setBounds(234, 227, 89, 23);
 		contentPane.add(btnAceptar);
 		
-		JRadioButton rdbtnHabitacionIndividual = new JRadioButton("Individual");
+		JRadioButton rdbtnHabitacionIndividual = new JRadioButton(Messages.getMessage(Login.user.getLanguage(), "Individual"));
 		rdbtnHabitacionIndividual.setEnabled(false);
 		buttonGroup.add(rdbtnHabitacionIndividual);
 		rdbtnHabitacionIndividual.setBounds(232, 37, 78, 23);
 		contentPane.add(rdbtnHabitacionIndividual);
 
-		JRadioButton rdbtnHabitacionDoble = new JRadioButton("Doble");
+		JRadioButton rdbtnHabitacionDoble = new JRadioButton(Messages.getMessage(Login.user.getLanguage(), "Doble"));
 		rdbtnHabitacionDoble.setEnabled(false);
 		buttonGroup.add(rdbtnHabitacionDoble);
 		rdbtnHabitacionDoble.setBounds(232, 63, 65, 23);
 		contentPane.add(rdbtnHabitacionDoble);
 
-		JRadioButton rdbtnHabitacionMultiple = new JRadioButton("Múltiple");
+		JRadioButton rdbtnHabitacionMultiple = new JRadioButton(Messages.getMessage(Login.user.getLanguage(), "Múltiple"));
 		rdbtnHabitacionMultiple.setEnabled(false);
 		buttonGroup.add(rdbtnHabitacionMultiple);
 		rdbtnHabitacionMultiple.addChangeListener(new ChangeListener() {
@@ -106,7 +103,7 @@ public class DatosVuelos extends JFrame {
 		rdbtnHabitacionMultiple.setBounds(232, 89, 65, 23);
 		contentPane.add(rdbtnHabitacionMultiple);
 		
-		JCheckBox chckbxReservarHabitacion = new JCheckBox("Reservar habitación");
+		JCheckBox chckbxReservarHabitacion = new JCheckBox(Messages.getMessage(Login.user.getLanguage(), "Reservar habitación"));
 		chckbxReservarHabitacion.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (chckbxReservarHabitacion.isSelected()) {
@@ -126,7 +123,7 @@ public class DatosVuelos extends JFrame {
 
 		JTextNumHabitaciones = new JTextField();
 		JTextNumHabitaciones.setEnabled(false);
-		JTextNumHabitaciones.setToolTipText("Núm. habitaciones");
+		JTextNumHabitaciones.setToolTipText(Messages.getMessage(Login.user.getLanguage(), "Núm. habitaciones"));
 		JTextNumHabitaciones.setBounds(303, 90, 86, 20);
 		contentPane.add(JTextNumHabitaciones);
 		JTextNumHabitaciones.setColumns(10);
@@ -179,7 +176,7 @@ public class DatosVuelos extends JFrame {
 		comboBoxDestinoVuelo.setSelectedIndex(destinoIndex);
 		contentPane.add(comboBoxDestinoVuelo);
 
-		JButton btnSeleccionarVuelo = new JButton("Seleccionar vuelo");
+		JButton btnSeleccionarVuelo = new JButton(Messages.getMessage(Login.user.getLanguage(), "Seleccionar vuelo"));
 		btnSeleccionarVuelo.setEnabled(false);
 		btnSeleccionarVuelo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -196,7 +193,7 @@ public class DatosVuelos extends JFrame {
 		});
 		btnSeleccionarVuelo.setBounds(10, 227, 182, 23);
 
-		JCheckBox chckbxReservaVuelo = new JCheckBox("Reservar Vuelo");
+		JCheckBox chckbxReservaVuelo = new JCheckBox(Messages.getMessage(Login.user.getLanguage(), "Reservar Vuelo"));
 		chckbxReservaVuelo.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 				if (chckbxReservaVuelo.isSelected()) {
@@ -212,7 +209,7 @@ public class DatosVuelos extends JFrame {
 		chckbxReservaVuelo.setSelected(vueloSelected);
 		contentPane.add(chckbxReservaVuelo);
 
-		JButton btnCancelar = new JButton("Cancelar");
+		JButton btnCancelar = new JButton(Messages.getMessage(Login.user.getLanguage(), "Cancelar"));
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -227,7 +224,7 @@ public class DatosVuelos extends JFrame {
 		btnCancelar.setBounds(335, 227, 89, 23);
 		contentPane.add(btnCancelar);
 
-		JButton btnAddVuelo = new JButton("Añadir Vuelo");
+		JButton btnAddVuelo = new JButton(Messages.getMessage(Login.user.getLanguage(), "Añadir Vuelo"));
 		btnAddVuelo.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				try {
@@ -236,6 +233,7 @@ public class DatosVuelos extends JFrame {
 				} catch (Exception f) {
 					f.printStackTrace();
 				}
+				dispose();
 			}
 		});
 		btnAddVuelo.setBounds(6, 193, 186, 23);
@@ -245,11 +243,11 @@ public class DatosVuelos extends JFrame {
 			btnAddVuelo.setVisible(false);
 		}
 
-		JLabel lblHoraLlegada = new JLabel("Hora Llegada: ");
+		JLabel lblHoraLlegada = new JLabel(Messages.getMessage(Login.user.getLanguage(), "Hora Llegada: "));
 		lblHoraLlegada.setBounds(31, 137, 89, 14);
 		contentPane.add(lblHoraLlegada);
 
-		JLabel lblHoraSalida = new JLabel("Hora Salida: ");
+		JLabel lblHoraSalida = new JLabel(Messages.getMessage(Login.user.getLanguage(), "Hora Salida: "));
 		lblHoraSalida.setBounds(31, 93, 89, 14);
 
 		comboBoxDestinoVuelo.addItemListener(new ItemListener() {
@@ -263,22 +261,23 @@ public class DatosVuelos extends JFrame {
 		
 		btnAceptar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				JOptionPane.showMessageDialog(getOwner(), getMessage(), "Resumen reserva", JOptionPane.INFORMATION_MESSAGE);
+				JOptionPane.showMessageDialog(getOwner(), getMessage(), Messages.getMessage(Login.user.getLanguage(), "Resumen reserva"), JOptionPane.INFORMATION_MESSAGE);
 			}
 
 			private String getMessage() {
-				String message = "Has reservado ";
+				String message = Messages.getMessage(Login.user.getLanguage(), "Has reservado ");
 //				If destination is checked
 				if (chckbxReservaVuelo.isSelected()) {
 //					Check if a time has been selected
 					if (!textFieldHoraSalida.getText().toString().equals("")) {
-						message += "un vuelo desde " + comboBoxDestinoVuelo.getSelectedItem().toString() + " a las " + textFieldHoraSalida.getText();
+						message += Messages.getMessage(Login.user.getLanguage(), "un vuelo desde ") + comboBoxDestinoVuelo.getSelectedItem().toString() 
+								+ Messages.getMessage(Login.user.getLanguage(), " a las ") + textFieldHoraSalida.getText();
 						if (!chckbxReservarHabitacion.isSelected()) {
 							return message += ".";
 						}
 //					If ReservaHabitacion is not checked
 					} else if (!chckbxReservarHabitacion.isSelected()) {
-						return "Nada ha sido reservado.";
+						return Messages.getMessage(Login.user.getLanguage(), "Nada ha sido reservado.");
 					}
 				}
 //				If ReservaHabitacion is checked
@@ -292,24 +291,25 @@ public class DatosVuelos extends JFrame {
 //							Message except " y "
 							return message;
 						} else {
-							return "Nada ha sido reservado.";
+							return Messages.getMessage(Login.user.getLanguage(), "Nada ha sido reservado.");
 						}
 					}
 //					Both are checked
 					if (chckbxReservaVuelo.isSelected() && chckbxReservarHabitacion.isSelected()) {
-						message += " y una habitación ";
+						message += Messages.getMessage(Login.user.getLanguage(), " y una habitación ");
 					}
 					if (rdbtnHabitacionIndividual.isSelected()) {
-						message += "individual.";
+						message += Messages.getMessage(Login.user.getLanguage(), "individual.");
 					} else if (rdbtnHabitacionDoble.isSelected()) {
-						message += "doble.";
+						message += Messages.getMessage(Login.user.getLanguage(), "doble.");
 					} else if (rdbtnHabitacionMultiple.isSelected()) {
-						message += "para " + JTextNumHabitaciones.getText() + " personas.";
+						message += Messages.getMessage(Login.user.getLanguage(), "para ") + JTextNumHabitaciones.getText() 
+						+ (Integer.parseInt(JTextNumHabitaciones.getText()) == 1? Messages.getMessage(Login.user.getLanguage(), "persona.") : Messages.getMessage(Login.user.getLanguage(), " personas."));
 					}
 				}
 //				If no checkbox is checked
 				if (!(chckbxReservaVuelo.isSelected() || chckbxReservarHabitacion.isSelected())) {
-					return "Nada ha sido reservado.";
+					return Messages.getMessage(Login.user.getLanguage(), "Nada ha sido reservado.");
 				}
 				return message;
 			}
