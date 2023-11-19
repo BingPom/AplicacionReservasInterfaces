@@ -84,6 +84,11 @@ public class DatosVuelos extends JFrame {
 		rdbtnHabitacionDoble.setBounds(232, 63, 65, 23);
 		contentPane.add(rdbtnHabitacionDoble);
 
+		JLabel lblNotValidHuespedesNumber = new JLabel(Messages.getMessage(Login.user.getLanguage(), "Número de huéspedes no válido"));
+		lblNotValidHuespedesNumber.setForeground(Color.RED);
+		lblNotValidHuespedesNumber.setBounds(234, 118, 155, 13);
+		lblNotValidHuespedesNumber.setVisible(false);
+		
 		JRadioButton rdbtnHabitacionMultiple = new JRadioButton(Messages.getMessage(Login.user.getLanguage(), "Múltiple"));
 		rdbtnHabitacionMultiple.setEnabled(false);
 		buttonGroup.add(rdbtnHabitacionMultiple);
@@ -92,10 +97,12 @@ public class DatosVuelos extends JFrame {
 				if (rdbtnHabitacionMultiple.isSelected()) {
 					JTextNumHabitaciones.setEnabled(true);
 					JTextNumHabitaciones.setText("");
+					lblNotValidHuespedesNumber.setVisible(false);
 					btnAceptar.setEnabled(false);
 				} else {
 					JTextNumHabitaciones.setEnabled(false);
 					JTextNumHabitaciones.setText("");
+					lblNotValidHuespedesNumber.setVisible(false);
 					btnAceptar.setEnabled(true);
 				}
 			}
@@ -161,9 +168,11 @@ public class DatosVuelos extends JFrame {
 				try {
 					Double.parseDouble(JTextNumHabitaciones.getText());
 					JTextNumHabitaciones.setForeground(Color.BLACK);
+					lblNotValidHuespedesNumber.setVisible(false);
 					return true;
 				} catch (NumberFormatException f) {
 					JTextNumHabitaciones.setForeground(Color.RED);
+					lblNotValidHuespedesNumber.setVisible(true);
 				}
 				return false;
 			}
@@ -337,5 +346,7 @@ public class DatosVuelos extends JFrame {
 		contentPane.add(btnSeleccionarVuelo);
 		contentPane.add(lblHoraSalida);
 		contentPane.add(textFieldHoraSalida);
+		contentPane.add(lblNotValidHuespedesNumber);
+		
 	}
 }

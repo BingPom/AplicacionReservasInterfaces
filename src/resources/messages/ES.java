@@ -33,6 +33,7 @@ public class ES {
 		put("persona.", "persona.");
 		put(" personas.", " personas.");
 		put("Nada ha sido reservado.", "Nada ha sido reservado.");
+		put("Número de huéspedes no válido", "Número de huéspedes no válido");
 //		TablaVuelos
 		put("Vuelos Disponibles", "Vuelos Disponibles");
 		put("Selecciona un vuelo desde: ", "Selecciona un vuelo desde: ");
