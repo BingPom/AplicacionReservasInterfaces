@@ -98,7 +98,7 @@ public class Login extends JFrame {
 		
 		passwordFieldPassword = new JPasswordField();
 		
-		JButton btnAceptar = new JButton("Aceptar");
+		JButton btnAceptar = new JButton("Enter");
 		btnAceptar.addContainerListener(new ContainerAdapter() {
 			@Override
 			public void componentRemoved(ContainerEvent e) {
@@ -137,7 +137,7 @@ public class Login extends JFrame {
 			}
 		});
 		
-		JButton btnCancelar = new JButton("Cancelar");
+		JButton btnCancelar = new JButton("Cancel");
 		btnCancelar.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();

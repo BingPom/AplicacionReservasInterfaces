@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 
 import javax.swing.JButton;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ListSelectionEvent;
@@ -32,7 +33,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.ListSelectionModel;
 import java.awt.event.MouseAdapter;
 
-public class TablaVuelos extends JDialog {
+public class TablaVuelos extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private final JPanel contentPanel = new JPanel();
@@ -135,6 +136,20 @@ public class TablaVuelos extends JDialog {
 				JButton cancelButton = new JButton(Messages.getMessage(Login.user.getLanguage(), "Cancelar"));
 				cancelButton.setActionCommand("Cancel");
 				buttonPane.add(cancelButton);
+				cancelButton.addActionListener(new ActionListener() {
+					
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						try {
+							DatosVuelos frame = new DatosVuelos("", "", false, 0);
+							frame.setVisible(true);
+						} catch (Exception f) {
+							f.printStackTrace();
+						}
+						dispose();
+					}
+				});
+				
 			}
 		}
 		

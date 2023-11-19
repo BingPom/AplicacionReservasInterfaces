@@ -298,10 +298,15 @@ public class DatosVuelos extends JFrame {
 					if (chckbxReservaVuelo.isSelected() && chckbxReservarHabitacion.isSelected()) {
 						message += Messages.getMessage(Login.user.getLanguage(), " y una habitación ");
 					}
-					if (rdbtnHabitacionIndividual.isSelected()) {
+//					If Individual is selected or if multiple is selected and the value is 1
+					if (rdbtnHabitacionIndividual.isSelected() || 
+							(rdbtnHabitacionMultiple.isSelected() && Integer.parseInt(JTextNumHabitaciones.getText()) == 1)) {
 						message += Messages.getMessage(Login.user.getLanguage(), "individual.");
-					} else if (rdbtnHabitacionDoble.isSelected()) {
+//					If Double is selected or if multiple is selected and the value is 2
+					} else if (rdbtnHabitacionDoble.isSelected()|| 
+							(rdbtnHabitacionMultiple.isSelected() && Integer.parseInt(JTextNumHabitaciones.getText()) == 2)) {
 						message += Messages.getMessage(Login.user.getLanguage(), "doble.");
+//					If multiple is selected
 					} else if (rdbtnHabitacionMultiple.isSelected()) {
 						message += Messages.getMessage(Login.user.getLanguage(), "para ") + JTextNumHabitaciones.getText() 
 						+ (Integer.parseInt(JTextNumHabitaciones.getText()) == 1? Messages.getMessage(Login.user.getLanguage(), "persona.") : Messages.getMessage(Login.user.getLanguage(), " personas."));

@@ -8,12 +8,18 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
+import javax.swing.text.JTextComponent.KeyBinding;
 import javax.swing.JTextField;
+import javax.swing.KeyStroke;
 import javax.swing.JLabel;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JDialog;
 import javax.swing.JButton;
 import java.awt.Font;
+
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
@@ -25,6 +31,8 @@ import model.Vuelo;
 import java.awt.Component;
 
 import resources.VuelosResources;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class AddVuelo extends JFrame {
 
@@ -113,45 +121,26 @@ public class AddVuelo extends JFrame {
 		comboBoxTarifa.setBounds(135, 179, 108, 22);
 		contentPane.add(comboBoxTarifa);
 		
-		
-		
 		JLabel lblSimboloEuro = new JLabel("€");
 		lblSimboloEuro.setBounds(231, 226, 16, 14);
 		
 		JButton btnAdd = new JButton("Add");
+		btnAdd.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+					addVueloAndExit(comboBoxDestino, comboBoxSalidaHora, comboBoxSalidaMinutos, 
+							comboBoxLlegadaHora, comboBoxLlegadaMinutos, comboBoxTarifa);
+				}
+			}
+		});
 		btnAdd.setEnabled(false);
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				VuelosResources.addVuelo(new Vuelo(comboBoxDestino.getSelectedItem().toString(), 
-													toTime(comboBoxSalidaHora, comboBoxSalidaMinutos), 
-													toTime(comboBoxLlegadaHora, comboBoxLlegadaMinutos), 
-													toTarifa(comboBoxTarifa.getSelectedItem().toString()),
-													Double.parseDouble(textFieldCoste.getText())));
-//				Close window
-				try {
-					DatosVuelos dialog = new DatosVuelos(null, null, false, 0);
-					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-					dialog.setVisible(true);
-				} catch (Exception f) {
-					f.printStackTrace();
-				}
-				dispose();
+				addVueloAndExit(comboBoxDestino, comboBoxSalidaHora, comboBoxSalidaMinutos, comboBoxLlegadaHora,
+						comboBoxLlegadaMinutos, comboBoxTarifa);
 			}
-			
-			private String toTime(JComboBox hora, JComboBox minuto) {
-				return hora.getSelectedItem().toString() + ":" + minuto.getSelectedItem().toString();
-			}
-			
-			private Tarifa toTarifa(String tarifa) {
-				switch(tarifa) {
-				case "Turista":
-					return Tarifa.TURISTA;
-				case "Business":
-					return Tarifa.BUSINESS;
-				default:
-					return Tarifa.TURISTA;
-				}
-			}
+
 		});
 		btnAdd.setBounds(310, 183, 114, 23);
 		
@@ -200,19 +189,18 @@ public class AddVuelo extends JFrame {
 			}
 		});
 		
-		
-		
 		JButton btnClose = new JButton("Close");
+		btnClose.addKeyListener(new KeyAdapter() {
+			@Override
+			public void keyPressed(KeyEvent e) {
+				if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+					closeWindow();
+				}
+			}
+		});
 		btnClose.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					DatosVuelos dialog = new DatosVuelos(null, null, false, 0);
-					dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
-					dialog.setVisible(true);
-				} catch (Exception f) {
-					f.printStackTrace();
-				}
-				dispose();
+				closeWindow();
 			}
 		});
 		btnClose.setBounds(310, 222, 114, 23);
@@ -234,7 +222,71 @@ public class AddVuelo extends JFrame {
 		contentPane.add(btnClose);
 		contentPane.add(lblSimboloEuro);
 		setFocusTraversalPolicy(new FocusTraversalOnArray(new Component[]{contentPane, lblDestino, comboBoxDestino, lblHoraSalida, comboBoxSalidaHora, lbl2Puntos_1, comboBoxSalidaMinutos, lblHoraLlegada, comboBoxLlegadaHora, lbl2Puntos_2, comboBoxLlegadaMinutos, lblTarifa, comboBoxTarifa, lblCoste, textFieldCoste, lblSimboloEuro, btnAdd, btnClose}));
+		
+//		When ENTER pressed, add Vuelo and close window
+		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke(KeyEvent.VK_ENTER, 0), "Add");
+				getRootPane().getActionMap().put("Add", (Action) new AbstractAction() {
+					
+					public void actionPerformed(ActionEvent e) {
+						addVueloAndExit(comboBoxDestino, comboBoxSalidaHora, comboBoxSalidaMinutos, comboBoxLlegadaHora, comboBoxLlegadaMinutos, comboBoxTarifa);
+					}
+					
+				});
+		
+//		When ESCAPE pressed, close window
+		getRootPane().getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+		        KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0), "Cancel");
+		        getRootPane().getActionMap().put("Cancel", (Action) new AbstractAction(){ 
+
+		            public void actionPerformed(ActionEvent e) {
+		                closeWindow();
+		            }
+		       });
 	}
 	
+	private void addVueloAndExit(JComboBox comboBoxDestino, JComboBox comboBoxSalidaHora,
+			JComboBox comboBoxSalidaMinutos, JComboBox comboBoxLlegadaHora, JComboBox comboBoxLlegadaMinutos,
+			JComboBox comboBoxTarifa) {
+		try {
+			VuelosResources.addVuelo(new Vuelo(comboBoxDestino.getSelectedItem().toString(), 
+					toTime(comboBoxSalidaHora, comboBoxSalidaMinutos), 
+					toTime(comboBoxLlegadaHora, comboBoxLlegadaMinutos), 
+					toTarifa(comboBoxTarifa.getSelectedItem().toString()),
+					Double.parseDouble(textFieldCoste.getText())));
+		} catch (NullPointerException e) {
+//			If Cost is null
+			return;
+		}
+		
+//		Close window
+		closeWindow();
+	}
+
+	private void closeWindow() {
+		try {
+			DatosVuelos dialog = new DatosVuelos(null, null, false, 0);
+			dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+			dialog.setVisible(true);
+		} catch (Exception f) {
+			f.printStackTrace();
+		}
+		dispose();
+	}
+	
+	private static String toTime(JComboBox hora, JComboBox minuto) {
+		return hora.getSelectedItem().toString() + ":" + minuto.getSelectedItem().toString();
+	}
+	
+	private static Tarifa toTarifa(String tarifa) {
+		switch(tarifa) {
+		case "Turista":
+			return Tarifa.TURISTA;
+		case "Business":
+			return Tarifa.BUSINESS;
+		default:
+			return Tarifa.TURISTA;
+		}
+	}
 	
 }
